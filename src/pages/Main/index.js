@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Keyboard, Alert, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import api from '../../services/api';
 
@@ -18,28 +19,35 @@ import {
   ProfileButtonText,
 } from './styles';
 
-export default function Main() {
-  const [users, setUsers] = useState([
-    {
-      name: 'Lucas',
-      login: 'login',
-      bio: 'Lorem ipsium dankdsn dnasndask aksjnd',
-      avatar: 'https://api.adorable.io/avatars/285/abott@adorable.png',
-    },
-  ]);
+export default function Main(props) {
+  const [users, setUsers] = useState([]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
 
-  useEffect(async () => {
-    setLoading(true);
-    const storage = await AsyncStorage.getItem('users');
+  const loadStorage = async () => {
+    AsyncStorage.clear();
+    const storage = JSON.parse(await AsyncStorage.getItem('users'));
+    console.log(storage);
+    if (!storage) {
+      setUsers([]);
+    } else {
+      setUsers(storage);
+    }
+  };
 
-    setUsers(JSON.parse(storage));
+  const setItem = async () => {
+    await AsyncStorage.setItem('users', JSON.stringify(users));
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    loadStorage();
     setLoading(false);
   }, []);
 
   useEffect(() => {
-    AsyncStorage.setItem('users', JSON.stringify(users));
+    console.log(users);
+    setItem();
   }, [users]);
 
   const handleUserSubmit = async () => {
@@ -56,22 +64,20 @@ export default function Main() {
       bio: response.data.bio,
       avatar: response.data.avatar_url,
     };
-
-    const findOne = users.filter(item => {
-      return item.login === data.login;
-    });
-
-    console.log(findOne);
-
-    if (findOne.length !== 0) {
-      return Alert.alert('Error!', "You can't add the same user two times!");
+    if (users) {
+      setUsers([...users, data]);
+    } else {
+      setUsers(data);
     }
-    setUsers([...users, data]);
     setInput('');
 
-    Keyboard.dismiss();
+    setLoading(false);
 
-    return setLoading(false);
+    return Keyboard.dismiss();
+  };
+
+  const handleNavigation = user => {
+    props.navigation.navigate('User', { user });
   };
 
   return (
@@ -99,11 +105,11 @@ export default function Main() {
         data={users}
         keyExtractor={user => user.login}
         renderItem={({ item }) => (
-          <User>
+          <User key={item.login}>
             <Avatar source={{ uri: item.avatar }} />
             <Name>{item.name}</Name>
             <Bio>{item.bio}</Bio>
-            <ProfileButton onPress={() => {}}>
+            <ProfileButton onPress={() => handleNavigation(item)}>
               <ProfileButtonText>See profile</ProfileButtonText>
             </ProfileButton>
           </User>
@@ -115,4 +121,10 @@ export default function Main() {
 
 Main.navigationOptions = {
   title: 'Users',
+};
+
+Main.propTypes = {
+  navigation: PropTypes.shape({
+    navigate: PropTypes.func,
+  }).isRequired,
 };

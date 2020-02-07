@@ -44,9 +44,9 @@ export const User = styled.View`
 `;
 
 export const Avatar = styled.Image`
-  height: 60px;
-  width: 60px;
-  border-radius: 30px;
+  height: 80px;
+  width: 80px;
+  border-radius: 40px;
 `;
 
 export const Name = styled.Text`
@@ -54,7 +54,9 @@ export const Name = styled.Text`
   font-weight: bold;
   margin: 5px;
 `;
-export const Bio = styled.Text`
+export const Bio = styled.Text.attrs({
+  numberOfLines: 2,
+})`
   margin: 5px;
   text-align: center;
 `;
