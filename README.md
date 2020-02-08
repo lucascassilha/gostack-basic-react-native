@@ -19,6 +19,8 @@
   
   <img alt="Size" src="https://img.shields.io/github/repo-size/lucascassilha/gostack-react-native?color=green">
   
+  <img alt="Codacy" src="https://img.shields.io/codacy/grade/967f96c4d0204314b0cbc7197dbe4040">
+
 
 </p>
 
