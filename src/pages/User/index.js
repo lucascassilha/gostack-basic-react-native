@@ -20,7 +20,6 @@ import {
 export default function User(props) {
   const [starred, setStarred] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(1);
   const user = props.navigation.getParam('user');
 
   const loadApi = async () => {
