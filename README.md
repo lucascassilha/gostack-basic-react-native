@@ -16,6 +16,9 @@
   <img alt="GitHub top language" src="https://img.shields.io/github/languages/top/lucascassilha/gostack-react-native?color=green">
 
   <img alt="License" src="https://img.shields.io/badge/license-MIT-%2304D361?color=green">
+  
+  <img alt="Size" src="https://img.shields.io/github/repo-size/lucascassilha/gostack-react-native?color=green">
+  
 
 </p>
 
