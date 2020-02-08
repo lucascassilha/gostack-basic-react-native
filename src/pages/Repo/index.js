@@ -1,5 +1,5 @@
 import React from 'react';
-import { View } from 'react-native';
+import PropTypes from 'prop-types';
 import { WebView } from 'react-native-webview';
 
 // import { Container } from './styles';
@@ -12,3 +12,9 @@ export default function Repo(props) {
 Repo.navigationOptions = ({ navigation }) => ({
   title: navigation.getParam('data').name,
 });
+
+Repo.propTypes = {
+  navigation: PropTypes.shape({
+    getParam: PropTypes.func,
+  }).isRequired,
+};
